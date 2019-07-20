@@ -1,0 +1,17 @@
+#!/bin/bash
+echo "==========================="
+echo "    SYSTEM INFORMATION"
+echo "==========================="
+echo "Kernel:"
+uname -r
+echo " "
+echo "Memory Usage:"
+free -mh | awk '/Mem:/ {print $3 "/" $2}'
+echo " "
+echo "Disk Usuage:"
+echo " "
+df -h | awk '/\/dev\/sda1/ {print "	HDD:" $3 "/" $2}'
+echo " "
+echo "Active Users:"
+users
+echo " "
