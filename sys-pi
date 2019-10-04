@@ -10,7 +10,7 @@ free -mh | awk '/Mem:/ {print "Memory Usage: " $3 "/" $2}'
 echo " "
 df -h | awk '/\/dev\/root/ {print "Disk Usage for HDD: " $3 "/" $2}'
 echo " "
-users | awk '{print "Active Users: " $1" "$2" "$3" "$4" "$5}'
+users | awk '/./ {print "Active Users: " $ALL}'
 echo " "
 /opt/vc/bin/vcgencmd measure_temp | awk '{print "CPU Temperature: " $1}'
 echo " "

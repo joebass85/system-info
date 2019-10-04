@@ -10,14 +10,16 @@ free -mh | awk '/Mem:/ {print "Memory Usage: " $3 "/" $2}'
 echo " "
 df -h | awk '/\/dev\/sda2/ {print "Disk Usage for HDD: " $3 "/" $2}'
 echo " "
-users | awk '{print "Active Users: " $1" "$2" "$3" "$4" "$5}'
+acpi -b | awk '/B/ {print "Battery: " $4}'
+echo " "
+users | awk '/./ {print "Active Users: " $ALL}'
 echo " "
 echo "CPU Temperature (By Core):"
 echo " "
-sensors | awk '/Core 0:/ {print "    Core 0: " $3}'
-sensors | awk '/Core 1:/ {print "    Core 1: " $3}'
-sensors | awk '/Core 2:/ {print "    Core 2: " $3}'
-sensors | awk '/Core 3:/ {print "    Core 3: " $3}'
+sensors | awk '/Core 0:/ {print "    Core 0: " $3$4}'
+sensors | awk '/Core 1:/ {print "    Core 1: " $3$4}'
+sensors | awk '/Core 2:/ {print "    Core 2: " $3$4}'
+sensors | awk '/Core 3:/ {print "    Core 3: " $3$4}'
 echo " "
-sudo hddtemp /dev/sda2 | awk '/\/dev\/sda2/ {print "HDD Temperature: " $4}'
+sudo hddtemp /dev/sda2 | awk '/\/dev\/sda2/ {print "HDD Temperature: " $4$5}'
 echo " "
