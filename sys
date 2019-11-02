@@ -1,25 +1,56 @@
 #!/bin/bash
-echo " "
-echo "==========================="
-echo "    SYSTEM INFORMATION"
-echo "==========================="
-echo " "
-uname -r | awk '{print "Kernel: " $1}'
-echo " "
-free -mh | awk '/Mem:/ {print "Memory Usage: " $3 "/" $2}'
-echo " "
-df -h | awk '/\/dev\/sda2/ {print "Disk Usage for HDD: " $3 "/" $2}'
-echo " "
-acpi -b | awk '/B/ {print "Battery: " $4}'
-echo " "
-users | awk '/./ {print "Active Users: " $ALL}'
-echo " "
-echo "CPU Temperature (By Core):"
-echo " "
-sensors | awk '/Core 0:/ {print "    Core 0: " $3$4}'
-sensors | awk '/Core 1:/ {print "    Core 1: " $3$4}'
-sensors | awk '/Core 2:/ {print "    Core 2: " $3$4}'
-sensors | awk '/Core 3:/ {print "    Core 3: " $3$4}'
-echo " "
-sudo hddtemp /dev/sda2 | awk '/\/dev\/sda2/ {print "HDD Temperature: " $4$5}'
-echo " "
+
+Kern=`uname -r`
+RAM=`free -h | awk '/^Mem:/ {print $3 "/" $2}'`
+
+DU=`df -h /dev/sda2 --output=used,size | awk 'NR==2 {print $1 "/" $2}'`
+
+type -fP acpi > /dev/null 2>&1 && Bat=`acpi -b | awk '/B/ {print "Battery: " $4}'`
+
+Users=`users`
+
+CPU_Temp(){
+	awk '
+		{
+			if(NR=/Core [0-3]/){
+				if($2~/^[0-3]:$/){
+					$2=substr($2, 0, 1)
+				}
+
+				if(substr($3, 0, 1) ~ /^+$/){
+					printf("  Core %s: %s\n", $2+1, substr($3, 2))
+				}else{
+					printf("  Core %s: %s\n", $2+1, $3)
+				}
+			}
+		}
+	' <<< "$(sensors)"
+}
+
+[ $UID -eq 0 ] && HDD_Temp=`hddtemp /dev/sda2 | cut -d ' ' -f 4`
+
+cat <<-EOF
+
+	===========================
+	    SYSTEM INFORMATION
+	===========================
+
+	Kernel: ${Kern:-N/A}
+
+	Memory Usage: ${RAM:-N/A}
+
+
+	Disk Usage for HDD: ${DU:-N/A}
+
+
+	Battery: ${Bat:-N/A}
+
+	Active Users: ${Users:-N/A}
+
+	CPU Temperature (By Core):
+
+	`CPU_Temp`
+
+	HDD Temperature: ${HDD_Temp:-N/A}
+
+EOF
