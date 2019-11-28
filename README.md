@@ -6,6 +6,7 @@ disc usage
 memory usage
 kernel release
 active users on the system
+and more
 ```
 The CPU temperature only supports up to 4 compute cores. Also working to fix this.
 
