@@ -12,7 +12,7 @@ df -h | awk '/\/dev\/sda2/ {print "Disk Usage for HDD: " $3 "/" $2}'
 echo
 acpi -b | awk '/B/ {print "Battery: " $4}'
 echo
-users | awk '/./ {print "Active Users: " $0}'
+users | awk '{print "Active Users: " $0}'
 echo
 echo "CPU Temperature (By Core):"
 echo
@@ -22,5 +22,5 @@ sensors | awk '/Core 2:/ {print "    Core 2: " $3$4}'
 sensors | awk '/Core 3:/ {print "    Core 3: " $3$4}'
 echo
 sudo hddtemp /dev/sda2 | awk '/\/dev\/sda2/ {print "HDD Temperature: " $4$5}'
-echol
+echo
 
