@@ -10,6 +10,10 @@ df -h | awk '/\/dev\/root/ {print "	Disk Usage for HDD: " $3 "/" $2}'
 users | awk '{print "	Active Users: " $0}'
 echo "	Terminal:" $TERMINAL
 echo "	Shell:" $SHELL
+# for the ip commands, change the inet 10 statement in the following
+# awk command to match the top-level of your subnet mask.
+# i.e. ip a | awk '/inet 192/' rather than inet 10 if your network
+# starts with 192.
 ip=$(ip a | awk '/inet 10/ {print $2}' | cut -c -10)
 echo "	IP Address: $ip"
 echo

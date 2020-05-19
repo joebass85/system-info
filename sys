@@ -15,6 +15,10 @@ grep leafpad ~/out.txt | awk '{print "	Leafpad Installed"}'
 grep xmonad ~/out.txt | awk '{print "	Xmonad Installed"}' | uniq
 grep spectrwm ~/out.txt | awk '{print "	SpectrWM Installed"}'
 grep qtile ~/out.txt | awk '{print "	Qtile Installed"}'
+# for the ip commands, change the inet 10 regex in the
+# following awk to whatever your top-level subdomain is
+# i.e. ip a | awk '/inet 192/' rather than inet 10 if
+# your network starts with 192.
 ip=$(ip a | awk '/inet 10/ {print $2}' | cut -c -10)
 echo "	IP Address: $ip"
 cat /sys/class/power_supply/BAT0/capacity | awk '{print "	Battery: " $0"%"}'
