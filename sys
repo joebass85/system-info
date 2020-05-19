@@ -1,26 +1,24 @@
 #!/bin/bash
+# Depends on GNU Utils, lolcat, pacman, acpi, fortune-mod
+free -mh | awk '/Mem/ {print "	"$1, $3"/"$2}'
+users | awk '{print "	Active Users: " $0}'
+df -h | awk '/dev\/sda1/ {print "	Disk Usage: " $3"/"$2}'
+uname -r | awk '{print "	Kernel: " $0}'
+echo "	Terminal:" $TERMINAL
+echo "	Shell:" $SHELL
+pacman -Qe > ~/out.txt
+wc -l ~/out.txt | awk '{print "	Pacman Packages: " $1}'
+grep nano ~/out.txt | awk '{print "	Nano installed"}'
+grep vim ~/out.txt | awk '{print "	Vim Installed"}'
+grep geany ~/out.txt | awk '{print "	Geany Installed"}'
+grep leafpad ~/out.txt | awk '{print "	Leafpad Installed"}'
+grep xmonad ~/out.txt | awk '{print "	Xmonad Installed"}' | uniq
+grep spectrwm ~/out.txt | awk '{print "	SpectrWM Installed"}'
+grep qtile ~/out.txt | awk '{print "	Qtile Installed"}'
+ip=$(ip a | awk '/inet 10/ {print $2}' | cut -c -10)
+echo "	IP Address: $ip"
+cat /sys/class/power_supply/BAT0/capacity | awk '{print "	Battery: " $0"%"}'
 echo
-echo "==========================="
-echo "    SYSTEM INFORMATION"
-echo "==========================="
+fortune -s | awk '{print "	"$0}'
 echo
-uname -r | awk '{print "Kernel: " $1}'
-echo
-free -mh | awk '/Mem:/ {print "Memory Usage: " $3 "/" $2}'
-echo
-df -h | awk '/\/dev\/sda2/ {print "Disk Usage for HDD: " $3 "/" $2}'
-echo
-acpi -b | awk '/B/ {print "Battery: " $4}'
-echo
-echo -n "Active Users: "
-users
-echo
-echo "CPU Temperature (By Core):"
-echo
-sensors | awk '/Core 0:/ {print "    Core 0: " $3$4}'
-sensors | awk '/Core 1:/ {print "    Core 1: " $3$4}'
-sensors | awk '/Core 2:/ {print "    Core 2: " $3$4}'
-sensors | awk '/Core 3:/ {print "    Core 3: " $3$4}'
-echo
-sudo hddtemp /dev/sda2 | awk '/\/dev\/sda2/ {print "HDD Temperature: " $4$5}'
-echo
+rm ~/out.txt

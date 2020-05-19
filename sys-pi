@@ -1,17 +1,17 @@
 #!/bin/bash
 echo
-echo "==========================="
-echo "    SYSTEM INFORMATION"
-echo "==========================="
+echo "	==========================="
+echo "	    SYSTEM INFORMATION"
+echo "	==========================="
 echo
-uname -r | awk '{print "Kernel: " $1}'
+uname -r | awk '{print "	Kernel: " $1}'
+free -mh | awk '/Mem:/ {print "	Memory Usage: " $3 "/" $2}'
+df -h | awk '/\/dev\/root/ {print "	Disk Usage for HDD: " $3 "/" $2}'
+users | awk '{print "	Active Users: " $0}'
+echo "	Terminal:" $TERMINAL
+echo "	Shell:" $SHELL
+ip=$(ip a | awk '/inet 10/ {print $2}' | cut -c -10)
+echo "	IP Address: $ip"
 echo
-free -mh | awk '/Mem:/ {print "Memory Usage: " $3 "/" $2}'
-echo
-df -h | awk '/\/dev\/root/ {print "Disk Usage for HDD: " $3 "/" $2}'
-echo
-echo -n "Active Users: "
-users
-echo
-/opt/vc/bin/vcgencmd measure_temp | cut -c 6- | awk '{print "CPU Temperature: " $1}'
+fortune -s | awk '{print "	"$0}'
 echo
